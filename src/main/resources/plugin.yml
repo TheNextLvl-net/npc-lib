@@ -1,0 +1,6 @@
+name: "TNLNPC"
+main: "net.nonswag.tnl.npc.NPC"
+version: "1.0"
+api-version: "1.13"
+author: "NonSwag"
+depend: ["TNLListener"]

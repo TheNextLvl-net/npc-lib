@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TNLNPC">
+    <output-path>$USER_HOME$/Desktop/Coding/PluginProjects/Plugins</output-path>
+    <root id="archive" name="TNLNPC.jar">
+      <element id="module-output" name="TNLNPC" />
+    </root>
+  </artifact>
+</component>

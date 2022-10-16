@@ -4,3 +4,4 @@ version: "1.0"
 api-version: "1.13"
 author: "NonSwag"
 depend: ["TNLListener"]
+website: "https://www.thenextlvl.net"

@@ -13,8 +13,10 @@ public class NPCCommand extends SimpleCommand {
 
     private NPCCommand() {
         super("npc", "tnl.npc");
+        addSubCommand(new Skin());
         addSubCommand(new Create());
         addSubCommand(new Delete());
         addSubCommand(new Select());
+        addSubCommand(new Unselect());
     }
 }

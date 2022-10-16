@@ -1,6 +1,7 @@
 package net.nonswag.tnl.npc.commands;
 
 import net.nonswag.core.api.command.Invocation;
+import net.nonswag.core.api.logger.Color;
 import net.nonswag.core.api.message.Placeholder;
 import net.nonswag.tnl.listener.api.command.simple.PlayerSubCommand;
 import net.nonswag.tnl.listener.api.player.TNLPlayer;
@@ -24,12 +25,7 @@ class Create extends PlayerSubCommand {
         TNLPlayer player = (TNLPlayer) invocation.source();
         String name = "";
         if (args.length >= 2) name = String.join(" ", Arrays.asList(args).subList(1, args.length));
-        Storage.NPCs.add(new FakePlayer(name, player.worldManager().getLocation()).register());
-    }
-
-    @Override
-    public void usage(@Nonnull Invocation invocation) {
-        invocation.source().sendMessage("%prefix% §c/npc create §8(§6Name§8)");
+        Storage.NPCs.add(new FakePlayer(Color.colorize(name.replace("\\n", "\n")), player.worldManager().getLocation()).register());
     }
 
     @Nonnull
@@ -38,5 +34,10 @@ class Create extends PlayerSubCommand {
         List<String> suggestions = new ArrayList<>();
         Placeholder.Registry.placeholders().forEach(placeholder -> suggestions.add("%%%s%%".formatted(placeholder.placeholder())));
         return suggestions;
+    }
+
+    @Override
+    public void usage(@Nonnull Invocation invocation) {
+        invocation.source().sendMessage("%prefix% §c/npc create §8(§6Name§8)");
     }
 }

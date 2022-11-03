@@ -7,6 +7,7 @@ import net.nonswag.tnl.listener.api.command.simple.PlayerSubCommand;
 import net.nonswag.tnl.listener.api.player.TNLPlayer;
 import net.nonswag.tnl.listener.api.player.npc.FakePlayer;
 import net.nonswag.tnl.npc.api.config.Storage;
+import net.nonswag.tnl.npc.api.manager.NPCManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ class Create extends PlayerSubCommand {
         TNLPlayer player = (TNLPlayer) invocation.source();
         String name = "";
         if (args.length >= 2) name = String.join(" ", Arrays.asList(args).subList(1, args.length));
-        Storage.NPCs.add(new FakePlayer(Color.colorize(name.replace("\\n", "\n")), player.worldManager().getLocation()).register());
+        FakePlayer npc = new FakePlayer(Color.colorize(name.replace("\\n", "\n")), player.worldManager().getLocation()).register();
+        player.getManager(NPCManager.class).setSelection(npc);
+        Storage.NPCs.add(npc);
     }
 
     @Nonnull

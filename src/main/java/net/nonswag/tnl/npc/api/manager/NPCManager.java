@@ -1,7 +1,7 @@
 package net.nonswag.tnl.npc.api.manager;
 
 import lombok.Getter;
-import net.nonswag.tnl.listener.api.packets.EntityMetadataPacket;
+import net.nonswag.tnl.listener.api.packets.outgoing.EntityMetadataPacket;
 import net.nonswag.tnl.listener.api.player.manager.Manager;
 import net.nonswag.tnl.listener.api.player.npc.FakePlayer;
 

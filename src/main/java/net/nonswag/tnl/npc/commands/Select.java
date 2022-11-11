@@ -8,7 +8,6 @@ import net.nonswag.tnl.listener.api.player.npc.FakePlayer;
 import net.nonswag.tnl.npc.api.manager.NPCManager;
 import net.nonswag.tnl.npc.api.messages.Messages;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +21,7 @@ class Select extends PlayerSubCommand {
     }
 
     @Override
-    protected void execute(@Nonnull Invocation invocation) {
+    protected void execute(Invocation invocation) {
         try {
             TNLPlayer player = (TNLPlayer) invocation.source();
             String[] args = invocation.arguments();
@@ -40,9 +39,8 @@ class Select extends PlayerSubCommand {
         }
     }
 
-    @Nonnull
     @Override
-    protected List<String> suggest(@Nonnull Invocation invocation) {
+    protected List<String> suggest(Invocation invocation) {
         List<String> suggestions = new ArrayList<>();
         Collection<FakePlayer> npcs = ((TNLPlayer) invocation.source()).npcFactory().getFakePlayers();
         npcs.forEach(fakePlayer -> suggestions.add(fakePlayer.getPlayer().getGameProfile().getUniqueId().toString()));
@@ -50,12 +48,12 @@ class Select extends PlayerSubCommand {
     }
 
     @Override
-    public void usage(@Nonnull Invocation invocation) {
+    public void usage(Invocation invocation) {
         invocation.source().sendMessage("%prefix% §c/npc select §8[§6ID§8]");
     }
 
     @Nullable
-    private FakePlayer getFakePlayer(@Nonnull TNLPlayer player, @Nonnull UUID uuid) {
+    private FakePlayer getFakePlayer(TNLPlayer player, UUID uuid) {
         FakePlayer npc = null;
         for (FakePlayer fakePlayer : player.npcFactory().getFakePlayers()) {
             if (fakePlayer.getPlayer().getGameProfile().getUniqueId().equals(uuid)) npc = fakePlayer;

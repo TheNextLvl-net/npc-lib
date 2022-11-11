@@ -2,6 +2,8 @@ package net.nonswag.tnl.npc.api.config;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.nonswag.core.api.annotation.FieldsAreNonnullByDefault;
+import net.nonswag.core.api.annotation.MethodsReturnNonnullByDefault;
 import net.nonswag.core.api.file.formats.JsonFile;
 import net.nonswag.tnl.listener.api.player.Skin;
 import net.nonswag.tnl.listener.api.player.npc.FakePlayer;
@@ -9,17 +11,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@FieldsAreNonnullByDefault
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class Storage {
-
-    @Nonnull
     private static final JsonFile saves = new JsonFile("plugins/NPC", "saves.json");
-
-    @Nonnull
     public static final List<FakePlayer> NPCs = new ArrayList<>();
 
     public static void loadAll() {
@@ -28,8 +29,7 @@ public class Storage {
         root.forEach(entry -> NPCs.add(parse(entry.getAsJsonObject()).register()));
     }
 
-    @Nonnull
-    private static FakePlayer parse(@Nonnull JsonObject object) {
+    private static FakePlayer parse(JsonObject object) {
         if (!object.has("name")) throw new NullPointerException("name not found");
         if (!object.has("location")) throw new NullPointerException("location not found");
         if (!object.has("uuid")) throw new NullPointerException("uuid not found");
@@ -40,8 +40,7 @@ public class Storage {
         return new FakePlayer(name, location, skin, uuid);
     }
 
-    @Nonnull
-    private static JsonObject parse(@Nonnull FakePlayer npc) {
+    private static JsonObject parse(FakePlayer npc) {
         JsonObject object = new JsonObject();
         object.addProperty("name", npc.getName());
         object.addProperty("location", parse(npc.getLocation()));
@@ -52,8 +51,7 @@ public class Storage {
         return object;
     }
 
-    @Nonnull
-    private static Location parse(@Nonnull String string) {
+    private static Location parse(String string) {
         String[] split = string.split(", ");
         if (split.length < 4) throw new NullPointerException("invalid location: " + string);
         World world = Bukkit.getWorld(split[0]);
@@ -67,19 +65,16 @@ public class Storage {
         return new Location(world, x, y, z, yaw, pitch);
     }
 
-    @Nonnull
-    private static String parse(@Nonnull Location location) {
+    private static String parse(Location location) {
         if (location.getWorld() == null) throw new NullPointerException("world cannot be null");
         return "%s, %s, %s, %s, %s, %s".formatted(location.getWorld().getName(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
-    @Nonnull
-    private static Skin parse(@Nonnull String[] strings) {
+    private static Skin parse(String[] strings) {
         return new Skin(strings[0], strings[1]);
     }
 
-    @Nonnull
-    private static String parse(@Nonnull Skin skin) {
+    private static String parse(Skin skin) {
         return "%s, %s".formatted(skin.getValue(), skin.getSignature());
     }
 

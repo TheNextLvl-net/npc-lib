@@ -8,8 +8,6 @@ import net.nonswag.tnl.npc.api.exceptions.InvalidSelectionException;
 import net.nonswag.tnl.npc.api.manager.NPCManager;
 import net.nonswag.tnl.npc.api.messages.Messages;
 
-import javax.annotation.Nonnull;
-
 class Delete extends PlayerSubCommand {
 
     Delete() {
@@ -17,7 +15,7 @@ class Delete extends PlayerSubCommand {
     }
 
     @Override
-    protected void execute(@Nonnull Invocation invocation) {
+    protected void execute(Invocation invocation) {
         TNLPlayer player = (TNLPlayer) invocation.source();
         NPCManager manager = player.getManager(NPCManager.class);
         if (manager.getSelection() == null) throw new InvalidSelectionException();

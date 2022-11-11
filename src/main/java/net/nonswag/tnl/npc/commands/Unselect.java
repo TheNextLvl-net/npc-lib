@@ -7,8 +7,6 @@ import net.nonswag.tnl.npc.api.exceptions.InvalidSelectionException;
 import net.nonswag.tnl.npc.api.manager.NPCManager;
 import net.nonswag.tnl.npc.api.messages.Messages;
 
-import javax.annotation.Nonnull;
-
 class Unselect extends PlayerSubCommand {
 
     Unselect() {
@@ -16,7 +14,7 @@ class Unselect extends PlayerSubCommand {
     }
 
     @Override
-    protected void execute(@Nonnull Invocation invocation) {
+    protected void execute(Invocation invocation) {
         TNLPlayer player = (TNLPlayer) invocation.source();
         if (player.getManager(NPCManager.class).getSelection() != null) {
             player.getManager(NPCManager.class).setSelection(null);

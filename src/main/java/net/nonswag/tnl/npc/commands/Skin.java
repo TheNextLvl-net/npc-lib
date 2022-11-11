@@ -13,8 +13,6 @@ import net.nonswag.tnl.npc.api.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import javax.annotation.Nonnull;
-
 class Skin extends PlayerSubCommand {
 
     Skin() {
@@ -23,7 +21,7 @@ class Skin extends PlayerSubCommand {
 
     @Override
     @SuppressWarnings("deprecation")
-    protected void execute(@Nonnull Invocation invocation) {
+    protected void execute(Invocation invocation) {
         TNLPlayer player = (TNLPlayer) invocation.source();
         String[] args = invocation.arguments();
         if (args.length <= 1) throw new InvalidUseException(this);
@@ -37,7 +35,7 @@ class Skin extends PlayerSubCommand {
     }
 
     @Override
-    public void usage(@Nonnull Invocation invocation) {
+    public void usage(Invocation invocation) {
         invocation.source().sendMessage("%prefix% §c/npc skin §8[§6Player§8]");
     }
 }

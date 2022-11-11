@@ -1,24 +1,18 @@
 package net.nonswag.tnl.npc.api.messages;
 
+import net.nonswag.core.api.annotation.FieldsAreNonnullByDefault;
 import net.nonswag.core.api.message.Message;
 import net.nonswag.core.api.message.key.MessageKey;
 
-import javax.annotation.Nonnull;
-
+@FieldsAreNonnullByDefault
 public final class Messages {
-
-    @Nonnull
     public static final MessageKey INVALID_SELECTION = new MessageKey("invalid-selection");
-    @Nonnull
     public static final MessageKey NOTHING_CHANGED = new MessageKey("nothing-selected");
-    @Nonnull
     public static final MessageKey CHANGED_SKIN = new MessageKey("changed-skin");
-    @Nonnull
     public static final MessageKey UNSELECTED = new MessageKey("unselected");
-    @Nonnull
     public static final MessageKey SELECTED = new MessageKey("selected");
-    @Nonnull
     public static final MessageKey DELETED = new MessageKey("deleted");
+    public static final MessageKey RENAMED = new MessageKey("renamed");
 
     private Messages() {
     }
@@ -35,6 +29,7 @@ public final class Messages {
         Message.getEnglish().setDefault(UNSELECTED, "%prefix% §aCleared your selection");
         Message.getEnglish().setDefault(SELECTED, "%prefix% §aSelection has been made");
         Message.getEnglish().setDefault(DELETED, "%prefix% §aNPC got deleted");
+        Message.getEnglish().setDefault(RENAMED, "%prefix% §aRenamed the npc to §r%name%");
         Message.getEnglish().save();
     }
 
@@ -45,6 +40,7 @@ public final class Messages {
         Message.getGerman().setDefault(UNSELECTED, "%prefix% §aDeine auswahl wurde gelöscht");
         Message.getGerman().setDefault(SELECTED, "%prefix% §aDeine auswahl wurde getroffen");
         Message.getGerman().setDefault(DELETED, "%prefix% §aDer NPC wurde gelöscht");
+        Message.getGerman().setDefault(RENAMED, "%prefix% §aDer NPC wurde zu §r%name%§a umbenannt");
         Message.getGerman().save();
     }
 }

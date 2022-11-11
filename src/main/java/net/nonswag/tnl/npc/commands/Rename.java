@@ -11,7 +11,9 @@ import net.nonswag.tnl.npc.api.exceptions.InvalidSelectionException;
 import net.nonswag.tnl.npc.api.manager.NPCManager;
 import net.nonswag.tnl.npc.api.messages.Messages;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class Rename extends PlayerSubCommand {
 
@@ -29,13 +31,20 @@ class Rename extends PlayerSubCommand {
         player.messenger().sendMessage(Messages.RENAMED, new Placeholder("name", name(player, manager.getSelection())));
     }
 
-    private String name(TNLPlayer player, FakePlayer fakePlayer) {
-        String name = Message.format(fakePlayer.getName(), player);
-        return name.length() > 10 ? name.substring(0, 10) + "..." : name;
+    @Override
+    protected List<String> suggest(Invocation invocation) {
+        List<String> suggestions = new ArrayList<>();
+        Placeholder.Registry.placeholders().forEach(placeholder -> suggestions.add("%%%s%%".formatted(placeholder.placeholder())));
+        return suggestions;
     }
 
     @Override
     public void usage(Invocation invocation) {
         invocation.source().sendMessage("%prefix% §c/npc rename §8[§6Name§8]");
+    }
+
+    private String name(TNLPlayer player, FakePlayer fakePlayer) {
+        String name = Message.format(fakePlayer.getName(), player);
+        return name.length() > 10 ? name.substring(0, 10) + "..." : name;
     }
 }

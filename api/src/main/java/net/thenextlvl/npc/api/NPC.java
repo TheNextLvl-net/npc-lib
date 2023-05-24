@@ -3,12 +3,11 @@ package net.thenextlvl.npc.api;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.bukkit.inventory.InventoryHolder;
 
 /**
  * An interface that represents a npc
  */
-public interface NPC extends InventoryHolder, Cloneable {
+public interface NPC extends Cloneable {
 
     /**
      * Get the player profile of the npc
@@ -44,4 +43,18 @@ public interface NPC extends InventoryHolder, Cloneable {
      * @param displayName the new name of the npc
      */
     void setDisplayName(Component displayName);
+
+    /**
+     * Get the equipment of the npc
+     *
+     * @return the equipment of the npc
+     */
+    Equipment getEquipment();
+
+    /**
+     * Creates a copy of this npc object
+     *
+     * @return the clone of this npc object
+     */
+    NPC clone();
 }

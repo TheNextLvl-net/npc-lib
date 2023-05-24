@@ -49,7 +49,9 @@ public class CraftNPCLoader implements NPCLoader {
 
     @Override
     public boolean canSee(Player player, NPC npc) {
-        return player.getWorld().equals(npc.getLocation().getWorld());
+        var rangeSquared = npc.getLoadingRange() * npc.getLoadingRange();
+        return player.getWorld().equals(npc.getLocation().getWorld())
+                && npc.getLocation().distanceSquared(player.getLocation()) <= rangeSquared;
     }
 
     @Override

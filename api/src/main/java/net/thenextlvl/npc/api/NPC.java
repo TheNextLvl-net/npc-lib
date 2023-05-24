@@ -14,7 +14,7 @@ public interface NPC extends Cloneable {
      *
      * @return the player profile of the npc
      */
-    PlayerProfile getPlayerProfile();
+    PlayerProfile getProfile();
 
     /**
      * Get the location of the npc

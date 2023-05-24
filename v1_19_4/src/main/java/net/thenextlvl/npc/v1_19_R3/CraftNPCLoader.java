@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.NPCLoader;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -23,8 +24,13 @@ public class CraftNPCLoader implements NPCLoader {
 
     @Override
     public void load(NPC npc, Player player) throws IllegalArgumentException, NullPointerException {
+        load(npc, player, player.getLocation());
+    }
+
+    @Override
+    public void load(NPC npc, Player player, Location location) throws IllegalArgumentException, NullPointerException {
         Preconditions.checkArgument(!isLoaded(npc, player), "NPC is already loaded");
-        Preconditions.checkArgument(canSee(player, npc), "NPC can't be seen by the player");
+        Preconditions.checkArgument(canSee(location, npc), "NPC can't be seen by the player");
         Preconditions.checkNotNull(npc.getLocation().getWorld(), "World can't be null");
         loader.load((CraftNPC) npc, (CraftPlayer) player);
     }
@@ -49,9 +55,14 @@ public class CraftNPCLoader implements NPCLoader {
 
     @Override
     public boolean canSee(Player player, NPC npc) {
+        return canSee(player.getLocation(), npc);
+    }
+
+    @Override
+    public boolean canSee(Location location, NPC npc) {
         var rangeSquared = npc.getLoadingRange() * npc.getLoadingRange();
-        return player.getWorld().equals(npc.getLocation().getWorld())
-                && npc.getLocation().distanceSquared(player.getLocation()) <= rangeSquared;
+        return location.getWorld().equals(npc.getLocation().getWorld())
+                && npc.getLocation().distanceSquared(location) <= rangeSquared;
     }
 
     @Override

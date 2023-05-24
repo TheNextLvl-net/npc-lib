@@ -25,6 +25,22 @@ public interface NPCLoader {
     void load(NPC npc, Player player) throws IllegalArgumentException, NullPointerException;
 
     /**
+     * Loads the npc for the specified player
+     *
+     * @param npc the npc to load
+     * @param player the player to load the npc for
+     * @param location the location to perform the checks at
+     *
+     * @throws IllegalArgumentException thrown if the npc is
+     * {@link NPCLoader#isLoaded(NPC, Player) already loaded} or not
+     * {@link NPCLoader#canSee(Player, NPC) visible} to the player
+     *
+     * @throws NullPointerException thrown if the
+     * {@link Location#getWorld() world} of the npc is null
+     */
+    void load(NPC npc, Player player, Location location) throws IllegalArgumentException, NullPointerException;
+
+    /**
      * Unloads the npc for the specified player
      *
      * @param npc the npc to unload
@@ -67,6 +83,15 @@ public interface NPCLoader {
      * @return true if the npc can be seen by the player
      */
     boolean canSee(Player player, NPC npc);
+
+    /**
+     * Checks if the npc can be seen at the given location
+     *
+     * @param location the location
+     * @param npc the npc
+     * @return true if the npc can be seen at the location
+     */
+    boolean canSee(Location location, NPC npc);
 
     /**
      * All the npcs that are currently loaded for the player

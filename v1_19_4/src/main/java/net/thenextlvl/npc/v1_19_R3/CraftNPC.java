@@ -36,6 +36,7 @@ public class CraftNPC implements NPC {
         return getPlayer().getId();
     }
 
+    @Override
     public int getLoadingRange() {
         return ((CraftWorld) getLocation().getWorld()).getHandle().spigotConfig.displayTrackingRange;
     }

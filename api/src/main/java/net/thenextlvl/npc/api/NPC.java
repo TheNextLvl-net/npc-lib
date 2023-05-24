@@ -52,6 +52,13 @@ public interface NPC extends Cloneable {
     Equipment getEquipment();
 
     /**
+     * Get the loading range of the npc
+     *
+     * @return the loading range of the npc
+     */
+    int getLoadingRange();
+
+    /**
      * Creates a copy of this npc object
      *
      * @return the clone of this npc object

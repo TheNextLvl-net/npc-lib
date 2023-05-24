@@ -14,7 +14,7 @@ import org.bukkit.Location;
 @AllArgsConstructor
 public class CraftNPC implements NPC {
     private Location location;
-    private PlayerProfile playerProfile;
+    private PlayerProfile profile;
     private Component displayName;
     private Equipment equipment;
 
@@ -22,7 +22,7 @@ public class CraftNPC implements NPC {
     public NPC clone() {
         try {
             var clone = (CraftNPC) super.clone();
-            clone.playerProfile = (PlayerProfile) playerProfile.clone();
+            clone.profile = (PlayerProfile) profile.clone();
             clone.equipment = equipment.clone();
             clone.location = location.clone();
             return clone;

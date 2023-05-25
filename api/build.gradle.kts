@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("java-library")
     id("maven-publish")
 }
 
@@ -21,8 +22,19 @@ repositories {
 }
 
 dependencies {
+    implementation("org.projectlombok:lombok:1.18.26")
+    annotationProcessor("org.projectlombok:lombok:1.18.26")
+
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.thenextlvl.core:annotations:1.0.0")
+
+    testImplementation("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 publishing {

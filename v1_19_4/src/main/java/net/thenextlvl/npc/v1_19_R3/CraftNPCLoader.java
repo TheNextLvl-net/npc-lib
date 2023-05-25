@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import static net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.*;
+import static net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION;
 
 public class CraftNPCLoader implements NPCLoader {
     private final ClientsideNPCLoader loader = new ClientsideNPCLoader(new NPCCache());
@@ -77,6 +78,7 @@ public class CraftNPCLoader implements NPCLoader {
             var list = npc.getPlayer().getEntityData().packDirty();
             var values = list != null ? list : new ArrayList<SynchedEntityData.DataValue<?>>();
             var equipment = new ArrayList<Pair<EquipmentSlot, ItemStack>>();
+            npc.getPlayer().getEntityData().set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) npc.getSkinParts().getRaw());
             connection.send(new ClientboundPlayerInfoUpdatePacket(ADD_PLAYER, npc.getPlayer()));
             connection.send(new ClientboundPlayerInfoUpdatePacket(UPDATE_LATENCY, npc.getPlayer()));
             connection.send(new ClientboundPlayerInfoUpdatePacket(UPDATE_DISPLAY_NAME, npc.getPlayer()));

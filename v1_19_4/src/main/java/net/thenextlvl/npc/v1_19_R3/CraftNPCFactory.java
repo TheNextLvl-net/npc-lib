@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.NPCFactory;
+import net.thenextlvl.npc.api.skin.SkinParts;
 import org.bukkit.Location;
 
 public class CraftNPCFactory implements NPCFactory {
@@ -16,6 +17,6 @@ public class CraftNPCFactory implements NPCFactory {
 
     @Override
     public NPC createNPC(Location location, PlayerProfile profile, Component displayName) {
-        return new CraftNPC(location.clone(), profile, displayName, new CraftEquipment());
+        return new CraftNPC(location.clone(), profile, displayName, new CraftEquipment(), SkinParts.DEFAULT.clone());
     }
 }

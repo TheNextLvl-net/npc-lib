@@ -16,6 +16,7 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.26")
     compileOnly("net.thenextlvl.core:annotations:1.0.0")
+    implementation("net.thenextlvl.core:utils:1.0.0")
 
     implementation(project(":api"))
 

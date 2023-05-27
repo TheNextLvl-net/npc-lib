@@ -2,8 +2,11 @@ package net.thenextlvl.npc.api;
 
 import com.destroystokyo.paper.SkinParts;
 import com.destroystokyo.paper.profile.PlayerProfile;
+import core.api.function.TriConsumer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 
 /**
  * An interface that represents a npc
@@ -72,6 +75,31 @@ public interface NPC extends Cloneable {
      * @return the loading range of the npc
      */
     int getLoadingRange();
+
+    /**
+     * Get the interaction consumer<br>
+     * The boolean represents whether the interaction is an attack<br>
+     * The equipment slot is the interaction hand
+     *
+     * @return the interaction consumer
+     */
+    TriConsumer<Boolean, EquipmentSlot, Player> onInteract();
+
+    /**
+     * Set the interaction consumer<br>
+     * The boolean represents whether the interaction is an attack<br>
+     * The equipment slot is the interaction hand
+     *
+     * @param consumer the interaction consumer
+     */
+    void onInteract(TriConsumer<Boolean, EquipmentSlot, Player> consumer);
+
+    /**
+     * Get the id of the npc
+     *
+     * @return the entity id
+     */
+    int getEntityId();
 
     /**
      * Creates a copy of this npc object

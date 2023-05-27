@@ -83,15 +83,15 @@ public class CraftNPCLoader implements NPCLoader {
             connection.send(new ClientboundPlayerInfoUpdatePacket(UPDATE_LATENCY, npc.getPlayer()));
             connection.send(new ClientboundPlayerInfoUpdatePacket(UPDATE_DISPLAY_NAME, npc.getPlayer()));
             connection.send(new ClientboundAddPlayerPacket(npc.getPlayer()));
-            connection.send(new ClientboundSetEntityDataPacket(npc.getId(), values));
-            connection.send(new ClientboundSetEquipmentPacket(npc.getId(), equipment));
+            connection.send(new ClientboundSetEntityDataPacket(npc.getEntityId(), values));
+            connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
             connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), (byte) (360 / npc.getLocation().getYaw())));
             cache.addNPC(player, npc);
         }
 
         private void unload(CraftNPC npc, CraftPlayer player) {
             var connection = player.getHandle().connection;
-            connection.send(new ClientboundRemoveEntitiesPacket(npc.getId()));
+            connection.send(new ClientboundRemoveEntitiesPacket(npc.getEntityId()));
             connection.send(new ClientboundPlayerInfoRemovePacket(List.of(npc.getPlayer().getUUID())));
             cache.removeNPC(player, npc);
         }

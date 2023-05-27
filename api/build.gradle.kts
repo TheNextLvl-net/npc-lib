@@ -13,7 +13,7 @@ java {
 }
 
 group = "net.thenextlvl.npc"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -27,6 +27,7 @@ dependencies {
 
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.thenextlvl.core:annotations:1.0.0")
+    compileOnly("net.thenextlvl.core:api:3.1.12")
 
     testImplementation("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

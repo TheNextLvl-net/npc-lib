@@ -1,5 +1,6 @@
 package net.thenextlvl.npc.v1_19_R3.event;
 
+import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import lombok.RequiredArgsConstructor;
 import net.thenextlvl.npc.v1_19_R3.CraftNPCProvider;
 import org.bukkit.Location;
@@ -12,6 +13,13 @@ import org.bukkit.event.player.*;
 @RequiredArgsConstructor
 public class CraftNPCListener implements Listener {
     private final CraftNPCProvider provider;
+
+    @EventHandler
+    public void onInteract(PlayerUseUnknownEntityEvent event) {
+        var npcs = provider.getNPCLoader().getNPCs(event.getPlayer());
+        var npc = npcs.stream().filter(all -> all.getEntityId() == event.getEntityId()).findFirst();
+        npc.ifPresent(value -> value.onInteract().accept(event.isAttack(), event.getHand(), event.getPlayer()));
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {

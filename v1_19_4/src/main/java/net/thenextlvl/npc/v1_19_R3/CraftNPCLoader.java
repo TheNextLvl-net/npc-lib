@@ -80,12 +80,13 @@ public class CraftNPCLoader implements NPCLoader {
     private record ClientsideNPCLoader(NPCCache cache) {
 
         private void load(CraftNPC npc, CraftPlayer player) {
+            var equipment = getEquipment(npc);
             var connection = player.getHandle().connection;
             if (npc.getSkin() != null) updateServerPlayer(npc, npc.getSkin());
             connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(List.of(npc.getPlayer())));
             connection.send(createAddPlayerPacket(npc));
             npc.getPlayer().getEntityData().refresh(player.getHandle());
-            connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), getEquipment(npc)));
+            if (!equipment.isEmpty()) connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
             byte yaw = (byte) ((int) (npc.getLocation().getYaw() % 360) * 256 / 360);
             connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), yaw));
             connection.send(new ClientboundAnimatePacket(npc.getPlayer(), SWING_MAIN_HAND));

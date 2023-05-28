@@ -2,8 +2,10 @@ package net.thenextlvl.npc.v1_19_R3;
 
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Pair;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.thenextlvl.npc.api.NPC;
@@ -17,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.WeakHashMap;
 
-import static net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.*;
 import static net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION;
 
 public class CraftNPCLoader implements NPCLoader {
@@ -68,25 +69,33 @@ public class CraftNPCLoader implements NPCLoader {
 
     @Override
     public Collection<? extends NPC> getNPCs(Player player) {
-        return loader.cache().getNPCs(player);
+        return new ArrayList<>(loader.cache().getNPCs(player));
     }
 
     private record ClientsideNPCLoader(NPCCache cache) {
 
         private void load(CraftNPC npc, CraftPlayer player) {
             var connection = player.getHandle().connection;
-            var list = npc.getPlayer().getEntityData().packDirty();
-            var values = list != null ? list : new ArrayList<SynchedEntityData.DataValue<?>>();
             var equipment = new ArrayList<Pair<EquipmentSlot, ItemStack>>();
             npc.getPlayer().getEntityData().set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) npc.getSkinParts().getRaw());
-            connection.send(new ClientboundPlayerInfoUpdatePacket(ADD_PLAYER, npc.getPlayer()));
-            connection.send(new ClientboundPlayerInfoUpdatePacket(UPDATE_LATENCY, npc.getPlayer()));
-            connection.send(new ClientboundPlayerInfoUpdatePacket(UPDATE_DISPLAY_NAME, npc.getPlayer()));
-            connection.send(new ClientboundAddPlayerPacket(npc.getPlayer()));
-            connection.send(new ClientboundSetEntityDataPacket(npc.getEntityId(), values));
-            connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
-            connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), (byte) (360 / npc.getLocation().getYaw())));
+            connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(List.of(npc.getPlayer())));
+            connection.send(createAddPlayerPacket(npc));
+            npc.getPlayer().getEntityData().refresh(player.getHandle());
+            // connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
+            connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), (byte) npc.getLocation().getYaw()));
             cache.addNPC(player, npc);
+        }
+
+        private static Packet<?> createAddPlayerPacket(CraftNPC npc) {
+            var buf = new FriendlyByteBuf(Unpooled.buffer());
+            buf.writeVarInt(npc.getEntityId());
+            buf.writeUUID(npc.getPlayer().getGameProfile().getId());
+            buf.writeDouble(npc.getLocation().getX());
+            buf.writeDouble(npc.getLocation().getY());
+            buf.writeDouble(npc.getLocation().getZ());
+            buf.writeByte((byte) ((int) npc.getLocation().getYaw() * 256F / 360F));
+            buf.writeByte((byte) ((int) npc.getLocation().getPitch() * 256F / 360F));
+            return new ClientboundAddPlayerPacket(buf);
         }
 
         private void unload(CraftNPC npc, CraftPlayer player) {

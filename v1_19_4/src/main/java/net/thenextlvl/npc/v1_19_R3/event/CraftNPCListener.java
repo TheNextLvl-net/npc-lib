@@ -33,22 +33,33 @@ public class CraftNPCListener implements Listener {
 
     @EventHandler
     public void onWorldChanged(PlayerChangedWorldEvent event) {
-        reloadNPCs(event.getPlayer(), event.getPlayer().getLocation());
+        updateNPCs(event.getPlayer(), event.getPlayer().getLocation());
     }
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        reloadNPCs(event.getPlayer(), event.getRespawnLocation());
+        updateNPCs(event.getPlayer(), event.getRespawnLocation());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
-        reloadNPCs(event.getPlayer(), event.getTo());
+        updateNPCs(event.getPlayer(), event.getTo());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onMove(PlayerTeleportEvent event) {
-        reloadNPCs(event.getPlayer(), event.getTo());
+    public void onTeleport(PlayerTeleportEvent event) {
+        updateNPCs(event.getPlayer(), event.getTo());
+    }
+
+    private void updateNPCs(Player player, Location location) {
+        var loader = provider.getNPCLoader();
+        loader.getNPCs(player).stream()
+                .filter(npc -> {
+                    var loadingRange = npc.getLoadingRange() * npc.getLoadingRange();
+                    return npc.getLocation().getWorld() != location.getWorld()
+                            || npc.getLocation().distanceSquared(location) > loadingRange;
+                }).forEach(npc -> loader.unload(npc, player));
+        loadNPCs(player, location);
     }
 
     private void reloadNPCs(Player player, Location location) {
@@ -59,6 +70,7 @@ public class CraftNPCListener implements Listener {
     private void loadNPCs(Player player, Location location) {
         var loader = provider.getNPCLoader();
         provider.getNPCRegistry().getNPCs().stream()
+                .filter(npc -> !loader.isLoaded(npc, player))
                 .filter(npc -> loader.canSee(location, npc))
                 .forEach(npc -> loader.load(npc, player, location));
     }

@@ -12,9 +12,6 @@ java {
     withJavadocJar()
 }
 
-group = "net.thenextlvl.npc"
-version = "1.1.0"
-
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")

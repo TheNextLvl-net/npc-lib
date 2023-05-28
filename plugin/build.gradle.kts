@@ -4,9 +4,6 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
 }
 
-group = "net.thenextlvl.npc"
-version = "1.0.0"
-
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")

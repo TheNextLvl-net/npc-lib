@@ -1,6 +1,5 @@
 package net.thenextlvl.npc.v1_19_R3;
 
-import com.destroystokyo.paper.SkinParts;
 import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import lombok.AccessLevel;
@@ -26,12 +25,12 @@ public class CraftNPC implements NPC {
     private PlayerProfile profile;
     private Component displayName;
     private Equipment equipment;
-    private SkinParts skinParts;
+    private @Nullable Skin skin;
     private @Nullable Interaction interaction;
     private final ServerPlayer player;
 
-    public CraftNPC(Location location, PlayerProfile profile, Component displayName, Equipment equipment, SkinParts skinParts) {
-        this(location, profile, displayName, equipment, skinParts, null, new ServerPlayer(
+    public CraftNPC(Location location, PlayerProfile profile, Component displayName, Equipment equipment, @Nullable Skin skin) {
+        this(location, profile, displayName, equipment, skin, null, new ServerPlayer(
                 MinecraftServer.getServer(),
                 ((CraftWorld) location.getWorld()).getHandle(),
                 ((CraftPlayerProfile) profile).getGameProfile()
@@ -55,7 +54,7 @@ public class CraftNPC implements NPC {
             clone.profile = (PlayerProfile) profile.clone();
             clone.equipment = equipment.clone();
             clone.location = location.clone();
-            clone.skinParts = new net.thenextlvl.npc.api.skin.SkinParts(skinParts.getRaw());
+            clone.skin = skin != null ? skin.clone() : null;
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

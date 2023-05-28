@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SkinParts implements com.destroystokyo.paper.SkinParts, Cloneable {
-    public static final SkinParts DEFAULT = new SkinParts(95);
-
     private int raw;
 
     @Override
@@ -91,5 +89,9 @@ public class SkinParts implements com.destroystokyo.paper.SkinParts, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    public static SkinParts getDefault() {
+        return new SkinParts(95);
     }
 }

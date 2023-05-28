@@ -1,0 +1,8 @@
+@FieldsAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package net.thenextlvl.npc.api.skin;
+
+import core.annotation.FieldsAreNonnullByDefault;
+import core.annotation.MethodsReturnNonnullByDefault;
+import core.annotation.ParametersAreNonnullByDefault;

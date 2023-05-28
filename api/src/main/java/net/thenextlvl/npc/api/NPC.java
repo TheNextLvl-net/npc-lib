@@ -1,8 +1,9 @@
 package net.thenextlvl.npc.api;
 
-import com.destroystokyo.paper.SkinParts;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
+import net.thenextlvl.npc.api.equipment.Equipment;
+import net.thenextlvl.npc.api.skin.Skin;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,25 +48,25 @@ public interface NPC extends Cloneable {
     void setDisplayName(Component displayName);
 
     /**
+     * Get the skin of the npc
+     *
+     * @return the current skin of the npc
+     */
+    Skin getSkin();
+
+    /**
+     * Set the skin of the npc
+     *
+     * @param skin the new skin of the npc
+     */
+    void setSkin(Skin skin);
+
+    /**
      * Get the equipment of the npc
      *
      * @return the equipment of the npc
      */
     Equipment getEquipment();
-
-    /**
-     * Get the skin parts of the npc
-     *
-     * @return the skin parts of the npc
-     */
-    SkinParts getSkinParts();
-
-    /**
-     * Set the skin parts of the npc
-     *
-     * @param parts the new skin parts of the npc
-     */
-    void setSkinParts(SkinParts parts);
 
     /**
      * Get the loading range of the npc

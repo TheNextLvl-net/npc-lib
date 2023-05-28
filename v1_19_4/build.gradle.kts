@@ -4,6 +4,9 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
+group = rootProject.group
+version = rootProject.version
+
 repositories {
     mavenCentral()
     maven("https://repo.thenextlvl.net/releases")

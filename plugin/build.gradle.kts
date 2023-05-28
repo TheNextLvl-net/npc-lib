@@ -4,6 +4,9 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
 }
 
+group = rootProject.group
+version = rootProject.version
+
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")

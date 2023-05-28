@@ -4,6 +4,9 @@ plugins {
     id("maven-publish")
 }
 
+group = rootProject.group
+version = rootProject.version
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17

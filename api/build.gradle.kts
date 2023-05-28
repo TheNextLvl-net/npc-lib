@@ -13,7 +13,7 @@ java {
 }
 
 group = "net.thenextlvl.npc"
-version = "1.0.3"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.projectlombok:lombok:1.18.26")
+    compileOnly("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")

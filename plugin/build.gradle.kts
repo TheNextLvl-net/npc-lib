@@ -34,4 +34,5 @@ bukkit {
     apiVersion = "1.19"
     website = "https://thenextlvl.net"
     authors = listOf("NonSwag")
+    depend = listOf("HologramAPI")
 }

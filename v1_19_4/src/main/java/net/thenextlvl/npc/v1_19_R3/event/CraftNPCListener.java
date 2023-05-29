@@ -3,6 +3,8 @@ package net.thenextlvl.npc.v1_19_R3.event;
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import lombok.RequiredArgsConstructor;
 import net.thenextlvl.npc.api.NPC;
+import net.thenextlvl.npc.api.event.NPCRegisterEvent;
+import net.thenextlvl.npc.api.event.NPCUnregisterEvent;
 import net.thenextlvl.npc.v1_19_R3.CraftNPCProvider;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,7 +27,7 @@ public class CraftNPCListener implements Listener {
                 .map(NPC::getInteraction)
                 .filter(Objects::nonNull)
                 .findFirst();
-        interaction.ifPresent(value ->  value.onInteract(event.isAttack(), event.getHand(), event.getPlayer()));
+        interaction.ifPresent(value -> value.onInteract(event.isAttack(), event.getHand(), event.getPlayer()));
     }
 
     @EventHandler
@@ -56,6 +58,23 @@ public class CraftNPCListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTeleport(PlayerTeleportEvent event) {
         updateNPCs(event.getPlayer(), event.getTo());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onNPCRegister(NPCRegisterEvent event) {
+        var loader = provider.getNPCLoader();
+        event.getNPC().getLocation().getWorld().getPlayers().stream()
+                .filter(player -> !loader.isLoaded(event.getNPC(), player))
+                .filter(player -> loader.canSee(player, event.getNPC()))
+                .forEach(player -> loader.load(event.getNPC(), player));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onNPCUnregister(NPCUnregisterEvent event) {
+        var loader = provider.getNPCLoader();
+        event.getNPC().getLocation().getWorld().getPlayers().stream()
+                .filter(player -> loader.isLoaded(event.getNPC(), player))
+                .forEach(player -> loader.unload(event.getNPC(), player));
     }
 
     private void updateNPCs(Player player, Location location) {

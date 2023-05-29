@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.NPCRegistry;
+import net.thenextlvl.npc.api.event.NPCRegisterEvent;
+import net.thenextlvl.npc.api.event.NPCUnregisterEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,13 +17,13 @@ public class CraftNPCRegistry implements NPCRegistry {
     @Override
     public void register(NPC npc) throws IllegalArgumentException {
         Preconditions.checkArgument(!isRegistered(npc), "NPC already registered");
-        nPCs.add(npc);
+        if (new NPCRegisterEvent(npc).callEvent()) nPCs.add(npc);
     }
 
     @Override
     public void unregister(NPC npc) throws IllegalArgumentException {
         Preconditions.checkArgument(isRegistered(npc), "NPC not registered");
-        nPCs.remove(npc);
+        if (new NPCUnregisterEvent(npc).callEvent()) nPCs.remove(npc);
     }
 
     @Override

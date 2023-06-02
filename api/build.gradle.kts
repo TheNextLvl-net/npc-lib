@@ -26,6 +26,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("net.thenextlvl.holograms:api:1.0.0")
     compileOnly("net.thenextlvl.core:annotations:1.0.0")
     compileOnly("net.thenextlvl.core:api:3.1.12")
 

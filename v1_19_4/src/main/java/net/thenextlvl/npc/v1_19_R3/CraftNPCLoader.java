@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.thenextlvl.hologram.api.HologramProvider;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.NPCLoader;
 import net.thenextlvl.npc.api.skin.Skin;
@@ -20,14 +21,25 @@ import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.WeakHashMap;
 
 import static net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_MAIN_HAND;
 import static net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION;
 
 public class CraftNPCLoader implements NPCLoader {
     private final ClientsideNPCLoader loader = new ClientsideNPCLoader(new NPCCache());
+    private static final @Nullable HologramProvider provider;
+
+    static {
+        var registration = Bukkit.getServicesManager().getRegistration(HologramProvider.class);
+        if (registration == null) provider = null;
+        else provider = registration.getProvider();
+    }
 
     @Override
     public void load(NPC npc, Player player) throws IllegalArgumentException, NullPointerException {
@@ -91,6 +103,7 @@ public class CraftNPCLoader implements NPCLoader {
             connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), yaw));
             connection.send(new ClientboundAnimatePacket(npc.getPlayer(), SWING_MAIN_HAND));
             handleScoreboards(player, npc);
+            showNameTag(player, npc);
             cache.addNPC(player, npc);
         }
 
@@ -143,7 +156,23 @@ public class CraftNPCLoader implements NPCLoader {
             var connection = player.getHandle().connection;
             connection.send(new ClientboundRemoveEntitiesPacket(npc.getEntityId()));
             connection.send(new ClientboundPlayerInfoRemovePacket(List.of(npc.getPlayer().getUUID())));
+            hideNameTag(player, npc);
             cache.removeNPC(player, npc);
+        }
+
+        private void showNameTag(Player player, CraftNPC npc) {
+            var tag = npc.getNameTag();
+            if (tag == null || provider == null) return;
+            if (provider.getHologramLoader().isLoaded(tag, player)) return;
+            if (!provider.getHologramLoader().canSee(player, tag)) return;
+            provider.getHologramLoader().load(tag, player);
+        }
+
+        private void hideNameTag(CraftPlayer player, CraftNPC npc) {
+            var tag = npc.getNameTag();
+            if (tag == null || provider == null) return;
+            if (!provider.getHologramLoader().isLoaded(tag, player)) return;
+            provider.getHologramLoader().unload(tag, player);
         }
     }
 

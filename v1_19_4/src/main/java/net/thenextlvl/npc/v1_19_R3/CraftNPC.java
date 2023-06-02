@@ -2,39 +2,57 @@ package net.thenextlvl.npc.v1_19_R3;
 
 import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.thenextlvl.hologram.api.Hologram;
+import net.thenextlvl.hologram.api.HologramProvider;
 import net.thenextlvl.npc.api.Interaction;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.equipment.Equipment;
 import net.thenextlvl.npc.api.skin.Skin;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
 @Setter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CraftNPC implements NPC {
+    private static final @Nullable HologramProvider provider;
     private Location location;
     private PlayerProfile profile;
     private Component displayName;
     private Equipment equipment;
     private @Nullable Skin skin;
+    private @Nullable Hologram nameTag;
     private @Nullable Interaction interaction;
     private final ServerPlayer player;
 
+    static {
+        var registration = Bukkit.getServicesManager().getRegistration(HologramProvider.class);
+        if (registration == null) provider = null;
+        else provider = registration.getProvider();
+    }
+
     public CraftNPC(Location location, PlayerProfile profile, Component displayName, Equipment equipment, @Nullable Skin skin) {
-        this(location, profile, displayName, equipment, skin, null, new ServerPlayer(
+        this.location = location;
+        this.profile = profile;
+        this.displayName = displayName;
+        this.equipment = equipment;
+        this.skin = skin;
+        this.nameTag = provider != null ? provider.getHologramFactory().createHologram(
+                location.clone().add(0, 2, 0),
+                provider.getHologramFactory().createTextLine(display -> {
+                    display.text(getDisplayName());
+                })) : null;
+        this.player = new ServerPlayer(
                 MinecraftServer.getServer(),
                 ((CraftWorld) location.getWorld()).getHandle(),
                 ((CraftPlayerProfile) profile).getGameProfile()
-        ));
+        );
     }
 
     @Override

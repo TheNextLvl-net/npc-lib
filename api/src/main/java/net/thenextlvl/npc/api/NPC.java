@@ -2,6 +2,7 @@ package net.thenextlvl.npc.api;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
+import net.thenextlvl.hologram.api.Hologram;
 import net.thenextlvl.npc.api.equipment.Equipment;
 import net.thenextlvl.npc.api.skin.Skin;
 import org.bukkit.Location;
@@ -46,6 +47,13 @@ public interface NPC extends Cloneable {
      * @param displayName the new name of the npc
      */
     void setDisplayName(Component displayName);
+
+    /**
+     * Get the nametag of the npc
+     *
+     * @return the hologram nametag of the npc
+     */
+    Hologram getNameTag();
 
     /**
      * Get the skin of the npc

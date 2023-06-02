@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":api"))
 
     compileOnly("org.projectlombok:lombok:1.18.26")
+    compileOnly("net.thenextlvl.holograms:api:1.0.0")
     compileOnly("net.thenextlvl.core:annotations:1.0.0")
 
     implementation("net.thenextlvl.core:api:3.1.12")

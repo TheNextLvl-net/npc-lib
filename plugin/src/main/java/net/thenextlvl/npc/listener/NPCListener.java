@@ -1,11 +1,11 @@
-package net.thenextlvl.npc.v1_19_R3.event;
+package net.thenextlvl.npc.listener;
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import lombok.RequiredArgsConstructor;
 import net.thenextlvl.npc.api.NPC;
+import net.thenextlvl.npc.api.NPCProvider;
 import net.thenextlvl.npc.api.event.NPCRegisterEvent;
 import net.thenextlvl.npc.api.event.NPCUnregisterEvent;
-import net.thenextlvl.npc.v1_19_R3.CraftNPCProvider;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,8 +16,8 @@ import org.bukkit.event.player.*;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class CraftNPCListener implements Listener {
-    private final CraftNPCProvider provider;
+public class NPCListener implements Listener {
+    private final NPCProvider provider;
 
     @EventHandler
     public void onInteract(PlayerUseUnknownEntityEvent event) {

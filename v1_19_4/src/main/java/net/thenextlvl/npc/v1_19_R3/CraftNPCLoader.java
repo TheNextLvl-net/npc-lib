@@ -8,7 +8,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.thenextlvl.hologram.api.HologramProvider;
@@ -30,7 +29,6 @@ import static net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING
 import static net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION;
 
 public class CraftNPCLoader implements NPCLoader {
-    private final ClientsideNPCLoader loader = new ClientsideNPCLoader(new NPCCache());
     private static final @Nullable HologramProvider provider;
 
     static {
@@ -38,6 +36,8 @@ public class CraftNPCLoader implements NPCLoader {
         if (registration == null) provider = null;
         else provider = registration.getProvider();
     }
+
+    private final ClientsideNPCLoader loader = new ClientsideNPCLoader(new NPCCache());
 
     @Override
     public void load(NPC npc, Player player) throws IllegalStateException, NullPointerException {
@@ -109,29 +109,6 @@ public class CraftNPCLoader implements NPCLoader {
 
     private record ClientsideNPCLoader(NPCCache cache) {
 
-        private void load(CraftNPC npc, CraftPlayer player) {
-            var equipment = getEquipment(npc);
-            var connection = player.getHandle().connection;
-            if (npc.getSkin() != null) updateServerPlayer(npc, npc.getSkin());
-            showTablistName(npc, player, true);
-            connection.send(createAddPlayerPacket(npc));
-            npc.getPlayer().getEntityData().refresh(player.getHandle());
-            if (!equipment.isEmpty()) connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
-            byte yaw = (byte) ((int) (npc.getLocation().getYaw() % 360) * 256 / 360);
-            connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), yaw));
-            connection.send(new ClientboundAnimatePacket(npc.getPlayer(), SWING_MAIN_HAND));
-            handleScoreboards(player, npc);
-            showNameTag(player, npc);
-            cache.addNPC(player, npc);
-        }
-
-        private void updateServerPlayer(CraftNPC npc, Skin skin) {
-            npc.getPlayer().getEntityData().set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) skin.parts().getRaw());
-            npc.getPlayer().getGameProfile().getProperties().removeAll("textures");
-            npc.getPlayer().getGameProfile().getProperties().put("textures",
-                    new Property("textures", skin.value(), skin.signature()));
-        }
-
         @NotNull
         private static List<Pair<EquipmentSlot, ItemStack>> getEquipment(CraftNPC npc) {
             var equipment = new ArrayList<Pair<EquipmentSlot, ItemStack>>(npc.getEquipment().getSize());
@@ -168,6 +145,29 @@ public class CraftNPCLoader implements NPCLoader {
             buf.writeByte((byte) ((int) npc.getLocation().getYaw() * 256F / 360F));
             buf.writeByte((byte) ((int) npc.getLocation().getPitch() * 256F / 360F));
             return new ClientboundAddPlayerPacket(buf);
+        }
+
+        private void load(CraftNPC npc, CraftPlayer player) {
+            var equipment = getEquipment(npc);
+            var connection = player.getHandle().connection;
+            if (npc.getSkin() != null) updateServerPlayer(npc, npc.getSkin());
+            showTablistName(npc, player, true);
+            connection.send(createAddPlayerPacket(npc));
+            npc.getPlayer().getEntityData().refresh(player.getHandle());
+            if (!equipment.isEmpty()) connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
+            byte yaw = (byte) ((int) (npc.getLocation().getYaw() % 360) * 256 / 360);
+            connection.send(new ClientboundRotateHeadPacket(npc.getPlayer(), yaw));
+            connection.send(new ClientboundAnimatePacket(npc.getPlayer(), SWING_MAIN_HAND));
+            handleScoreboards(player, npc);
+            showNameTag(player, npc);
+            cache.addNPC(player, npc);
+        }
+
+        private void updateServerPlayer(CraftNPC npc, Skin skin) {
+            npc.getPlayer().getEntityData().set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) skin.parts().getRaw());
+            npc.getPlayer().getGameProfile().getProperties().removeAll("textures");
+            npc.getPlayer().getGameProfile().getProperties().put("textures",
+                    new Property("textures", skin.value(), skin.signature()));
         }
 
         private void unload(CraftNPC npc, CraftPlayer player) {

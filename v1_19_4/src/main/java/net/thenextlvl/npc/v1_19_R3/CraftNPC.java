@@ -22,6 +22,14 @@ import org.jetbrains.annotations.Nullable;
 @Setter
 public class CraftNPC implements NPC {
     private static final @Nullable HologramProvider provider;
+
+    static {
+        var registration = Bukkit.getServicesManager().getRegistration(HologramProvider.class);
+        if (registration == null) provider = null;
+        else provider = registration.getProvider();
+    }
+
+    private final ServerPlayer player;
     private Location location;
     private PlayerProfile profile;
     private Component displayName;
@@ -29,13 +37,6 @@ public class CraftNPC implements NPC {
     private @Nullable Skin skin;
     private @Nullable Hologram nameTag;
     private @Nullable Interaction interaction;
-    private final ServerPlayer player;
-
-    static {
-        var registration = Bukkit.getServicesManager().getRegistration(HologramProvider.class);
-        if (registration == null) provider = null;
-        else provider = registration.getProvider();
-    }
 
     public CraftNPC(Location location, PlayerProfile profile, Component displayName, Equipment equipment, @Nullable Skin skin) {
         this.location = location;

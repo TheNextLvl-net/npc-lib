@@ -12,6 +12,10 @@ import lombok.Setter;
 public class SkinParts implements com.destroystokyo.paper.SkinParts, Cloneable {
     private int raw;
 
+    public static SkinParts getDefault() {
+        return new SkinParts(95);
+    }
+
     @Override
     public boolean hasCapeEnabled() {
         return (raw & 1) != 0;
@@ -89,9 +93,5 @@ public class SkinParts implements com.destroystokyo.paper.SkinParts, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
-    }
-
-    public static SkinParts getDefault() {
-        return new SkinParts(95);
     }
 }

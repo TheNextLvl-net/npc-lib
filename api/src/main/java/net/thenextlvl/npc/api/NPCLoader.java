@@ -64,7 +64,44 @@ public interface NPCLoader {
      * @throws NullPointerException thrown if the
      * {@link Location#getWorld() world} of the npc is null
      */
-    void update(NPC npc, Player player) throws IllegalArgumentException, NullPointerException;
+    void update(NPC npc, Player player) throws IllegalStateException, NullPointerException;
+
+    /**
+     * Add the npc to the tablist of a certain player
+     *
+     * @param npc the npc to add
+     * @param player the player
+     * @see NPCLoader#isTablistNameHidden(NPC, Player)
+     * @see NPCLoader#hideTablistName(NPC, Player)
+     * @throws IllegalStateException thrown if the npc is not
+     * {@link NPCLoader#isLoaded(NPC, Player) loaded} or the tablist name is not
+     * {@link NPCLoader#isTablistNameHidden(NPC, Player) hidden} from the player
+     */
+    void showTablistName(NPC npc, Player player) throws IllegalStateException;
+
+    /**
+     * Remove the tablist name of the npc for the specified player
+     *
+     * @param npc the npc
+     * @param player the player
+     * @throws IllegalStateException thrown if the npc was already removed from the tablist
+     * @apiNote This can have the side effect of removing the skin of the npc
+     * @see NPCLoader#isTablistNameHidden(NPC, Player)
+     * @see NPCLoader#showTablistName(NPC, Player)
+     * @throws IllegalStateException thrown if the npc is not
+     * {@link NPCLoader#isLoaded(NPC, Player) loaded} or the tablist name is already
+     * {@link NPCLoader#isTablistNameHidden(NPC, Player) hidden} from the player
+     */
+    void hideTablistName(NPC npc, Player player) throws IllegalStateException;
+
+    /**
+     * Checks if the npc was removed from the tablist of the player
+     *
+     * @param npc the npc
+     * @param player the player
+     * @return true if the npc was removed from the player's tablist
+     */
+    boolean isTablistNameHidden(NPC npc, Player player);
 
     /**
      * Checks if the npc is loaded for the player

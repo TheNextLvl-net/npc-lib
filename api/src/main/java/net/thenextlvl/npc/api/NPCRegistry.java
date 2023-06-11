@@ -17,17 +17,17 @@ public interface NPCRegistry {
      * Register a new npcs
      *
      * @param npc the npc to register
-     * @throws IllegalArgumentException thrown if the npc is already registered
+     * @throws IllegalStateException thrown if the npc is already registered
      */
-    void register(NPC npc) throws IllegalArgumentException;
+    void register(NPC npc) throws IllegalStateException;
 
     /**
      * Unregister a registered npc
      *
      * @param npc the npc to unregister
-     * @throws IllegalArgumentException thrown if the npc is not registered
+     * @throws IllegalStateException thrown if the npc is not registered
      */
-    void unregister(NPC npc) throws IllegalArgumentException;
+    void unregister(NPC npc) throws IllegalStateException;
 
     /**
      * Checks if a certain npc is registered

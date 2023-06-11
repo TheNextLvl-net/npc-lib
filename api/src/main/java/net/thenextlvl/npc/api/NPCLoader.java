@@ -15,14 +15,14 @@ public interface NPCLoader {
      * @param npc the npc to load
      * @param player the player to load the npc for
      *
-     * @throws IllegalArgumentException thrown if the npc is
+     * @throws IllegalStateException thrown if the npc is
      * {@link NPCLoader#isLoaded(NPC, Player) already loaded} or not
      * {@link NPCLoader#canSee(Player, NPC) visible} to the player
      *
      * @throws NullPointerException thrown if the
      * {@link Location#getWorld() world} of the npc is null
      */
-    void load(NPC npc, Player player) throws IllegalArgumentException, NullPointerException;
+    void load(NPC npc, Player player) throws IllegalStateException, NullPointerException;
 
     /**
      * Loads the npc for the specified player
@@ -31,14 +31,14 @@ public interface NPCLoader {
      * @param player the player to load the npc for
      * @param location the location to perform the checks at
      *
-     * @throws IllegalArgumentException thrown if the npc is
+     * @throws IllegalStateException thrown if the npc is
      * {@link NPCLoader#isLoaded(NPC, Player) already loaded} or not
      * {@link NPCLoader#canSee(Player, NPC) visible} to the player
      *
      * @throws NullPointerException thrown if the
      * {@link Location#getWorld() world} of the npc is null
      */
-    void load(NPC npc, Player player, Location location) throws IllegalArgumentException, NullPointerException;
+    void load(NPC npc, Player player, Location location) throws IllegalStateException, NullPointerException;
 
     /**
      * Unloads the npc for the specified player
@@ -46,10 +46,10 @@ public interface NPCLoader {
      * @param npc the npc to unload
      * @param player the player to unload the npc for
      *
-     * @throws IllegalArgumentException thrown if the npc is not
+     * @throws IllegalStateException thrown if the npc is not
      * {@link NPCLoader#isLoaded(NPC, Player) loaded}
      */
-    void unload(NPC npc, Player player) throws IllegalArgumentException;
+    void unload(NPC npc, Player player) throws IllegalStateException;
 
     /**
      * Updates the npc for the specified player
@@ -57,7 +57,7 @@ public interface NPCLoader {
      * @param npc the npc to update
      * @param player the player to update the npc for
      *
-     * @throws IllegalArgumentException thrown if the npc is
+     * @throws IllegalStateException thrown if the npc is
      * {@link NPCLoader#isLoaded(NPC, Player) already loaded} or not
      * {@link NPCLoader#canSee(Player, NPC) visible} to the player
      *

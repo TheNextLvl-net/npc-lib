@@ -15,14 +15,14 @@ public class CraftNPCRegistry implements NPCRegistry {
     private final Collection<NPC> nPCs = new ArrayList<>();
 
     @Override
-    public void register(NPC npc) throws IllegalArgumentException {
-        Preconditions.checkArgument(!isRegistered(npc), "NPC already registered");
+    public void register(NPC npc) throws IllegalStateException {
+        Preconditions.checkState(!isRegistered(npc), "NPC already registered");
         if (new NPCRegisterEvent(npc).callEvent()) nPCs.add(npc);
     }
 
     @Override
-    public void unregister(NPC npc) throws IllegalArgumentException {
-        Preconditions.checkArgument(isRegistered(npc), "NPC not registered");
+    public void unregister(NPC npc) throws IllegalStateException {
+        Preconditions.checkState(isRegistered(npc), "NPC not registered");
         if (new NPCUnregisterEvent(npc).callEvent()) nPCs.remove(npc);
     }
 

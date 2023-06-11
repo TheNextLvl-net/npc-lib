@@ -42,26 +42,26 @@ public class CraftNPCLoader implements NPCLoader {
     }
 
     @Override
-    public void load(NPC npc, Player player) throws IllegalArgumentException, NullPointerException {
+    public void load(NPC npc, Player player) throws IllegalStateException, NullPointerException {
         load(npc, player, player.getLocation());
     }
 
     @Override
-    public void load(NPC npc, Player player, Location location) throws IllegalArgumentException, NullPointerException {
-        Preconditions.checkArgument(!isLoaded(npc, player), "NPC is already loaded");
-        Preconditions.checkArgument(canSee(location, npc), "NPC can't be seen by the player");
+    public void load(NPC npc, Player player, Location location) throws IllegalStateException, NullPointerException {
+        Preconditions.checkState(!isLoaded(npc, player), "NPC is already loaded");
+        Preconditions.checkState(canSee(location, npc), "NPC can't be seen by the player");
         Preconditions.checkNotNull(npc.getLocation().getWorld(), "World can't be null");
         loader.load((CraftNPC) npc, (CraftPlayer) player);
     }
 
     @Override
-    public void unload(NPC npc, Player player) throws IllegalArgumentException {
-        Preconditions.checkArgument(isLoaded(npc, player), "NPC is not loaded");
+    public void unload(NPC npc, Player player) throws IllegalStateException {
+        Preconditions.checkState(isLoaded(npc, player), "NPC is not loaded");
         loader.unload((CraftNPC) npc, (CraftPlayer) player);
     }
 
     @Override
-    public void update(NPC npc, Player player) throws IllegalArgumentException, NullPointerException {
+    public void update(NPC npc, Player player) throws IllegalStateException, NullPointerException {
         unload(npc, player);
         load(npc, player);
     }

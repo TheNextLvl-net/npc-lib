@@ -68,20 +68,19 @@ public class CraftNPCLoader implements NPCLoader {
     public void showTablistName(NPC npc, Player player) throws IllegalStateException {
         Preconditions.checkState(isLoaded(npc, player), "NPC is not loaded");
         Preconditions.checkState(isTablistNameHidden(npc, player), "Tablist name is already shown");
-        loader.showTablistName(((CraftNPC) npc), ((CraftPlayer) player), false);
+        loader.showTablistName(((CraftNPC) npc), ((CraftPlayer) player), true);
     }
 
     @Override
     public void hideTablistName(NPC npc, Player player) {
         Preconditions.checkState(isLoaded(npc, player), "NPC is not loaded");
         Preconditions.checkState(!isTablistNameHidden(npc, player), "Tablist name is already hidden");
-        loader.hideTablistName((CraftNPC) npc, (CraftPlayer) player);
+        loader.hideTablistName((CraftNPC) npc, (CraftPlayer) player, true);
     }
 
     @Override
     public boolean isTablistNameHidden(NPC npc, Player player) {
-        var npcs = loader.cache().get(player);
-        return npcs != null && npcs.containsKey((CraftNPC) npc);
+        return loader.cache().isTablistNameHidden(player, (CraftNPC) npc);
     }
 
     @Override
@@ -151,7 +150,7 @@ public class CraftNPCLoader implements NPCLoader {
             var equipment = getEquipment(npc);
             var connection = player.getHandle().connection;
             if (npc.getSkin() != null) updateServerPlayer(npc, npc.getSkin());
-            showTablistName(npc, player, true);
+            showTablistName(npc, player, false);
             connection.send(createAddPlayerPacket(npc));
             npc.getPlayer().getEntityData().refresh(player.getHandle());
             if (!equipment.isEmpty()) connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
@@ -163,7 +162,7 @@ public class CraftNPCLoader implements NPCLoader {
             cache.addNPC(player, npc);
         }
 
-        private void updateServerPlayer(CraftNPC npc, Skin skin) {
+        private static void updateServerPlayer(CraftNPC npc, Skin skin) {
             npc.getPlayer().getEntityData().set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) skin.parts().getRaw());
             npc.getPlayer().getGameProfile().getProperties().removeAll("textures");
             npc.getPlayer().getGameProfile().getProperties().put("textures",
@@ -173,24 +172,24 @@ public class CraftNPCLoader implements NPCLoader {
         private void unload(CraftNPC npc, CraftPlayer player) {
             var connection = player.getHandle().connection;
             connection.send(new ClientboundRemoveEntitiesPacket(npc.getEntityId()));
-            connection.send(new ClientboundPlayerInfoRemovePacket(List.of(npc.getPlayer().getUUID())));
+            if (!cache().isTablistNameHidden(player, npc)) hideTablistName(npc, player, false);
             hideNameTag(player, npc);
-            cache.removeNPC(player, npc);
+            cache().removeNPC(player, npc);
         }
 
-        public void showTablistName(CraftNPC npc, CraftPlayer player, boolean initial) {
+        public void showTablistName(CraftNPC npc, CraftPlayer player, boolean cache) {
             var connection = player.getHandle().connection;
             connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(List.of(npc.getPlayer())));
-            if (!initial) cache().setTablistNameHidden(player, npc, false);
+            if (cache) cache().setTablistNameHidden(player, npc, false);
         }
 
-        public void hideTablistName(CraftNPC npc, CraftPlayer player) {
+        public void hideTablistName(CraftNPC npc, CraftPlayer player, boolean cache) {
             var connection = player.getHandle().connection;
             connection.send(new ClientboundPlayerInfoRemovePacket(List.of(npc.getPlayer().getUUID())));
-            cache().setTablistNameHidden(player, npc, true);
+            if (cache) cache().setTablistNameHidden(player, npc, true);
         }
 
-        private void showNameTag(Player player, CraftNPC npc) {
+        private static void showNameTag(Player player, CraftNPC npc) {
             var tag = npc.getNameTag();
             if (tag == null || provider == null) return;
             if (provider.getHologramLoader().isLoaded(tag, player)) return;
@@ -198,7 +197,7 @@ public class CraftNPCLoader implements NPCLoader {
             provider.getHologramLoader().load(tag, player);
         }
 
-        private void hideNameTag(CraftPlayer player, CraftNPC npc) {
+        private static void hideNameTag(CraftPlayer player, CraftNPC npc) {
             var tag = npc.getNameTag();
             if (tag == null || provider == null) return;
             if (!provider.getHologramLoader().isLoaded(tag, player)) return;
@@ -227,6 +226,11 @@ public class CraftNPCLoader implements NPCLoader {
             if (!npcs.containsKey(npc)) return;
             npcs.put(npc, hidden);
             put(player, npcs);
+        }
+
+        private boolean isTablistNameHidden(Player player, CraftNPC npc) {
+            var npcs = get(player);
+            return npcs != null && npcs.getOrDefault(npc, false);
         }
     }
 }

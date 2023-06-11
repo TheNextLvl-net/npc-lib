@@ -2,10 +2,12 @@ package net.thenextlvl.npc.listener;
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent;
 import lombok.RequiredArgsConstructor;
+import net.thenextlvl.npc.FakePlayerAPI;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.NPCProvider;
 import net.thenextlvl.npc.api.event.NPCRegisterEvent;
 import net.thenextlvl.npc.api.event.NPCUnregisterEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +19,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 public class NPCListener implements Listener {
+    private final FakePlayerAPI plugin;
     private final NPCProvider provider;
 
     @EventHandler
@@ -98,7 +101,14 @@ public class NPCListener implements Listener {
         provider.getNPCRegistry().getNPCs().stream()
                 .filter(npc -> !loader.isLoaded(npc, player))
                 .filter(npc -> loader.canSee(location, npc))
-                .forEach(npc -> loader.load(npc, player, location));
+                .forEach(npc -> {
+                    loader.load(npc, player, location);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        if (!loader.isLoaded(npc, player)) return;
+                        if (loader.isTablistNameHidden(npc, player)) return;
+                        loader.hideTablistName(npc, player);
+                    }, 100);
+                });
     }
 
     private void unloadNPCs(Player player) {

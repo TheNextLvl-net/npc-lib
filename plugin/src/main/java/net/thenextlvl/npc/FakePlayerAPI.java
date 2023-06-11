@@ -11,7 +11,7 @@ public class FakePlayerAPI extends JavaPlugin {
     public void onEnable() {
         var provider = getNPCProvider();
         Bukkit.getServicesManager().register(NPCProvider.class, provider, this, ServicePriority.Normal);
-        Bukkit.getPluginManager().registerEvents(new NPCListener(provider), this);
+        Bukkit.getPluginManager().registerEvents(new NPCListener(this, provider), this);
     }
 
     private NPCProvider getNPCProvider() {

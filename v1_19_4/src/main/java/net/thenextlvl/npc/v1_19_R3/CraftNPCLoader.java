@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.thenextlvl.hologram.api.HologramProvider;
@@ -23,10 +24,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import static net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_MAIN_HAND;
 import static net.minecraft.world.entity.player.Player.DATA_PLAYER_MODE_CUSTOMISATION;
@@ -89,7 +87,7 @@ public class CraftNPCLoader implements NPCLoader {
     @Override
     public boolean isLoaded(NPC npc, Player player) {
         var npcs = loader.cache().get(player);
-        return npcs != null && npcs.contains((CraftNPC) npc);
+        return npcs != null && npcs.containsKey((CraftNPC) npc);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class CraftNPCLoader implements NPCLoader {
 
     @Override
     public Collection<? extends NPC> getNPCs(Player player) {
-        return new ArrayList<>(loader.cache().getNPCs(player));
+        return new ArrayList<>(loader.cache().getNPCs(player).keySet());
     }
 
     private record ClientsideNPCLoader(NPCCache cache) {
@@ -115,7 +113,7 @@ public class CraftNPCLoader implements NPCLoader {
             var equipment = getEquipment(npc);
             var connection = player.getHandle().connection;
             if (npc.getSkin() != null) updateServerPlayer(npc, npc.getSkin());
-            connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(List.of(npc.getPlayer())));
+            showTablistName(npc, player, true);
             connection.send(createAddPlayerPacket(npc));
             npc.getPlayer().getEntityData().refresh(player.getHandle());
             if (!equipment.isEmpty()) connection.send(new ClientboundSetEquipmentPacket(npc.getEntityId(), equipment));
@@ -208,15 +206,15 @@ public class CraftNPCLoader implements NPCLoader {
         }
     }
 
-    private static class NPCCache extends WeakHashMap<Player, Collection<CraftNPC>> {
+    private static class NPCCache extends WeakHashMap<Player, Map<CraftNPC, Boolean>> {
 
-        private Collection<CraftNPC> getNPCs(Player player) {
-            return getOrDefault(player, new ArrayList<>());
+        private Map<CraftNPC, Boolean> getNPCs(Player player) {
+            return getOrDefault(player, new HashMap<>());
         }
 
         private void addNPC(Player player, CraftNPC npc) {
             var npcs = getNPCs(player);
-            npcs.add(npc);
+            npcs.put(npc, false);
             put(player, npcs);
         }
 

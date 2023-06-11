@@ -73,7 +73,8 @@ public interface NPCLoader {
     void showTablistName(NPC npc, Player player) throws IllegalStateException;
 
     /**
-     * Remove the tablist name of the npc for the specified player
+     * Remove the tablist name of the npc for the specified player<br>
+     * <i>This can have the side effect of removing the skin of the npc</i>
      *
      * @param npc    the npc
      * @param player the player
@@ -81,7 +82,6 @@ public interface NPCLoader {
      * @throws IllegalStateException thrown if the npc is not
      *                               {@link NPCLoader#isLoaded(NPC, Player) loaded} or the tablist name is already
      *                               {@link NPCLoader#isTablistNameHidden(NPC, Player) hidden} from the player
-     * @apiNote This can have the side effect of removing the skin of the npc
      * @see NPCLoader#isTablistNameHidden(NPC, Player)
      * @see NPCLoader#showTablistName(NPC, Player)
      */

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = rootProject.group
-version = rootProject.version
+version = "1.2.3"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

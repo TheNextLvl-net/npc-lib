@@ -5,7 +5,7 @@ plugins {
 }
 
 group = rootProject.group
-version = rootProject.version
+version = "1.2.4"
 
 repositories {
     mavenCentral()
@@ -20,6 +20,7 @@ dependencies {
 
     implementation(project(":api"))
     implementation(project(":v1_19_4", "reobf"))
+    implementation(project(":v1_20_1", "reobf"))
 }
 
 java {

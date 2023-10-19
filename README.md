@@ -1,6 +1,3 @@
-# npc-lib
-
-
 # NPC-Lib
 
 A modern, lightweight NPC library tailored for Paper server environments, offering simplicity and versatility.

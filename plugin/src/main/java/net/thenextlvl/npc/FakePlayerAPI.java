@@ -2,11 +2,14 @@ package net.thenextlvl.npc;
 
 import net.thenextlvl.npc.api.NPCProvider;
 import net.thenextlvl.npc.listener.NPCListener;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FakePlayerAPI extends JavaPlugin {
+    private final Metrics metrics = new Metrics(this, 20085);
+
     @Override
     public void onEnable() {
         var provider = getNPCProvider();
@@ -28,5 +31,6 @@ public class FakePlayerAPI extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getServicesManager().unregisterAll(this);
+        metrics.shutdown();
     }
 }

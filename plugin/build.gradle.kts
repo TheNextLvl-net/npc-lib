@@ -25,6 +25,8 @@ dependencies {
     implementation(project(":v1_19_4", "reobf"))
     implementation(project(":v1_20_1", "reobf"))
     implementation(project(":v1_20_2", "reobf"))
+
+    implementation("org.bstats:bstats-bukkit:3.0.2")
 }
 
 java {

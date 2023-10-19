@@ -18,14 +18,14 @@ dependencies {
 
     implementation(project(":api"))
 
-    compileOnly("org.projectlombok:lombok:1.18.26")
-    compileOnly("net.thenextlvl.holograms:api:1.0.1")
-    compileOnly("net.thenextlvl.core:annotations:1.0.0")
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    compileOnly("net.thenextlvl.holograms:api:1.0.2")
+    compileOnly("net.thenextlvl.core:annotations:2.0.0")
 
-    implementation("net.thenextlvl.core:api:3.1.12")
-    implementation("net.thenextlvl.core:utils:1.0.0")
+    implementation("net.thenextlvl.core:api:4.0.2")
+    implementation("net.thenextlvl.core:utils:1.0.5")
 
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
 }
 
 java {

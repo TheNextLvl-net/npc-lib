@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
+    id("net.minecrell.plugin-yml.paper") version "0.6.0"
 }
 
 group = rootProject.group
@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":api"))
     implementation(project(":v1_19_4", "reobf"))
     implementation(project(":v1_20_1", "reobf"))
+    implementation(project(":v1_20_2", "reobf"))
 }
 
 java {
@@ -32,11 +33,17 @@ tasks.shadowJar {
     minimize()
 }
 
-bukkit {
+paper {
     name = "NPC-Lib"
     main = "net.thenextlvl.npc.FakePlayerAPI"
     apiVersion = "1.19"
     website = "https://thenextlvl.net"
     authors = listOf("NonSwag")
-    depend = listOf("HologramAPI")
+    foliaSupported = true
+
+    serverDependencies {
+        register("HologramAPI") {
+            required = true
+        }
+    }
 }

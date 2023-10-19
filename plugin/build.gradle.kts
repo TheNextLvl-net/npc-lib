@@ -1,5 +1,8 @@
+import io.papermc.hangarpublishplugin.model.Platforms
+
 plugins {
     id("java")
+    id("io.papermc.hangar-publish-plugin") version "0.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
 }
@@ -31,6 +34,7 @@ java {
 
 tasks.shadowJar {
     minimize()
+    relocate("org.bstats", "net.thenextlvl.npc.bstats")
 }
 
 paper {
@@ -44,6 +48,29 @@ paper {
     serverDependencies {
         register("HologramAPI") {
             required = true
+        }
+    }
+}
+
+val versionString: String = project.version as String
+val isRelease: Boolean = !versionString.contains("-pre")
+
+hangarPublish { // docs - https://docs.papermc.io/misc/hangar-publishing
+    publications.register("plugin") {
+        id.set("NPC-Lib")
+        version.set(project.version as String)
+        channel.set(if (isRelease) "Release" else "Snapshot")
+        if (extra.has("HANGAR_API_TOKEN"))
+            apiKey.set(extra["HANGAR_API_TOKEN"] as String)
+        else apiKey.set(System.getenv("HANGAR_API_TOKEN"))
+        platforms {
+            register(Platforms.PAPER) {
+                jar.set(tasks.shadowJar.flatMap { it.archiveFile })
+                val versions: List<String> = (property("paperVersion") as String)
+                    .split(",")
+                    .map { it.trim() }
+                platformVersions.set(versions)
+            }
         }
     }
 }

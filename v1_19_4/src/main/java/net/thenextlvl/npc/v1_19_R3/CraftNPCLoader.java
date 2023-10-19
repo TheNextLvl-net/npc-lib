@@ -164,7 +164,6 @@ public class CraftNPCLoader implements NPCLoader {
 
         private static void updateServerPlayer(CraftNPC npc, Skin skin) {
             npc.getPlayer().getEntityData().set(DATA_PLAYER_MODE_CUSTOMISATION, (byte) skin.parts().getRaw());
-            npc.getPlayer().getGameProfile().getProperties().removeAll("textures");
             npc.getPlayer().getGameProfile().getProperties().put("textures",
                     new Property("textures", skin.value(), skin.signature()));
         }

@@ -17,7 +17,7 @@ A modern, lightweight NPC library tailored for Paper server environments, offeri
 
 To use the NPC-Lib, you need to install it as a plugin on your Minecraft server. Follow these steps:
 
-1. Download the NPC-Lib [JAR file](https://hangar.papermc.io/TheNextLvl/npc-lib/versions).
+1. Download the NPC-Lib [JAR file](https://hangar.papermc.io/TheNextLvl/NPC-Lib/versions).
 2. Place the JAR file into your server's `plugins` directory.
 3. Restart your Minecraft server.
 

@@ -103,7 +103,7 @@ public class NPCListener implements Listener {
                 .filter(npc -> loader.canSee(location, npc))
                 .forEach(npc -> {
                     loader.load(npc, player, location);
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    Bukkit.getGlobalRegionScheduler().runDelayed(plugin, task -> {
                         if (!loader.isLoaded(npc, player)) return;
                         if (loader.isTablistNameHidden(npc, player)) return;
                         loader.hideTablistName(npc, player);

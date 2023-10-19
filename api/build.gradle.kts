@@ -28,7 +28,6 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     compileOnly("net.thenextlvl.holograms:api:1.0.2")
     compileOnly("net.thenextlvl.core:annotations:2.0.0")
-    compileOnly("net.thenextlvl.core:api:3.1.12")
 
     testImplementation("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

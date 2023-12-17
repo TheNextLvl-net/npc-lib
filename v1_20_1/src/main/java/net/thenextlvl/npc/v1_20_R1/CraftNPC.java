@@ -7,8 +7,8 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.thenextlvl.hologram.api.Hologram;
 import net.thenextlvl.hologram.api.HologramProvider;
+import net.thenextlvl.hologram.api.hologram.Hologram;
 import net.thenextlvl.npc.api.Interaction;
 import net.thenextlvl.npc.api.NPC;
 import net.thenextlvl.npc.api.equipment.Equipment;
@@ -46,9 +46,8 @@ public class CraftNPC implements NPC {
         this.skin = skin;
         this.nameTag = provider != null ? provider.getHologramFactory().createHologram(
                 location.clone().add(0, 2, 0),
-                provider.getHologramFactory().createTextLine(display -> {
-                    display.text(getDisplayName());
-                })) : null;
+                getDisplayName()
+        ) : null;
         this.player = new ServerPlayer(
                 MinecraftServer.getServer(),
                 ((CraftWorld) location.getWorld()).getHandle(),

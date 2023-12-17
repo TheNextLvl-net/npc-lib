@@ -2,7 +2,7 @@ package net.thenextlvl.npc.api;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
-import net.thenextlvl.hologram.api.Hologram;
+import net.thenextlvl.hologram.api.hologram.Hologram;
 import net.thenextlvl.npc.api.equipment.Equipment;
 import net.thenextlvl.npc.api.skin.Skin;
 import org.bukkit.Location;

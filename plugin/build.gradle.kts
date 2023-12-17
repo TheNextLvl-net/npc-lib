@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":v1_19_4", "reobf"))
     implementation(project(":v1_20_1", "reobf"))
     implementation(project(":v1_20_2", "reobf"))
+    implementation(project(":v1_20_4", "reobf"))
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
 }

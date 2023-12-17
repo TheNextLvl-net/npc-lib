@@ -25,6 +25,8 @@ public class FakePlayerAPI extends JavaPlugin {
             return new net.thenextlvl.npc.v1_20_R1.CraftNPCProvider();
         if (version.contains("1.20.2"))
             return new net.thenextlvl.npc.v1_20_R2.CraftNPCProvider();
+        if (version.contains("1.20.3") || version.contains("1.20.4"))
+            return new net.thenextlvl.npc.v1_20_R3.CraftNPCProvider();
         throw new IllegalStateException("Your server version is not supported: " + version);
     }
 

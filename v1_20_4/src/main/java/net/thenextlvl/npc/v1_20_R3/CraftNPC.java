@@ -1,4 +1,4 @@
-package net.thenextlvl.npc.v1_20_R2;
+package net.thenextlvl.npc.v1_20_R3;
 
 import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.destroystokyo.paper.profile.PlayerProfile;
